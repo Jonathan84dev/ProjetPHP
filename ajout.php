@@ -46,7 +46,7 @@
   <input type="number" id="anciennete" name="anciennete" value="5" min=0 max=60><br><br>
 
   <label for="fname">Photo du salarié</label><br>
-  <input type="file" name="photo"><br>
+  <input type="file" name="photo_salarie"><br>
 
   <br/>
   <input type="submit" value="Ajouter !">

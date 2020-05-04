@@ -7,7 +7,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<link href="style.css" rel="stylesheet">
+
 </head>
 <body>
 
@@ -15,20 +18,18 @@
 
 <? 
 $bdd = new PDO('mysql:host=localhost;dbname=projetbdd;charset=utf8;port=3306', 'root', 'root', [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
-$request = "INSERT INTO salariés (prenom, nom, adresse, CP, ville, date_de_naissance, sexe, anciennete) VALUES ( :prenom, :nom, :adresse, :CP, :ville, :date_de_naissance, :sexe, :anciennete)";
+$request = "INSERT INTO salariés (prenom, nom, adresse, CP, ville, date_de_naissance, sexe, anciennete, fichier) VALUES ( :prenom, :nom, :adresse, :CP, :ville, :date_de_naissance, :sexe, :anciennete, :fichier)";
 $response = $bdd->prepare($request);
 
-$photo = $_FILES['photo']; // recup du fichier
-$pathinfodata=pathinfo($photo);
-var_dump($pathinfodata);
+$photo = $_FILES['photo_salarie']; // recup du fichier
+$tailledufichier = $photo['size'];
+$pathinfodata = pathinfo($photo['name']); // retourne le chemin du fichier
+$nomdufichier = $pathinfodata['filename']; // renvoit le nom du fichier
+$extensiondufichier = $pathinfodata['extension']; // renvoit l'extension
+$nouveaunomdufichier = $nomdufichier . "-" . uniqid() . "." . $extensiondufichier; // composition du nouveau nom de fichier
 
-
-$tailledufichier = $photo['size']; 
-if ($tailledufichier > 10000000){ // max 10MB
-echo "Votre fichier est trop volumineux, nous n'avons pas pu créer l'utilisateur !";
-}
-else 
-{
+    if (!empty($_POST) && !empty($_FILES))
+    {
     $response->execute([
         'prenom' => $_POST['prenom'],
         'nom' => $_POST['nom'],
@@ -38,15 +39,17 @@ else
         'date_de_naissance' => $_POST['date_de_naissance'],
         'sexe' => $_POST['sexe'],
         'anciennete' => $_POST['anciennete'],
-        ]); 
-    move_uploaded_file($photo['tmp_name'], __DIR__  .'/uploads/');
-        ?>
-        <p>
-<div class=bloc2>
+        'fichier' => $nouveaunomdufichier,
+        ]);
+
+    move_uploaded_file($photo['tmp_name'],  __DIR__  . '/uploads/' . $nouveaunomdufichier ); ?>
+        
+    <p>
+    <div class=bloc2>
     <h5><? echo "Vous avez ajouté l'utilisateur suivant à la base de données :"; ?></h5>
     <br/>
-    <ul>
-        
+
+    <ul>  
     <li>Prenom : <?= $_POST['prenom'] ?></li><br/>
     <li>Nom : <?= $_POST['nom'] ?></li><br/>
     <li>Adresse : <?= $_POST['adresse'] ?></li><br/>
@@ -64,12 +67,18 @@ else
         }
         else {
         echo 'Femme'; 
-    } 
-}       ?>
+                    } 
+    }
+    else {
+        echo "Un champ est manquant dans votre formulaire !";
+    }
+       ?>
     </li>
 
     <br/>
-    <li>Ancienneté : <?= $_POST['anciennete'] ?></li>
+    <li>Ancienneté : <?= $_POST['anciennete'] ?></li><br/>
+    <li>Photo: <img class="miniature" src="uploads/<?= $nouveaunomdufichier ?>"></img>
+
 </ul>
 <br/>
 </div>

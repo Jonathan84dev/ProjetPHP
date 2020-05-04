@@ -11,8 +11,7 @@
   <body>
 
   <? include 'navbar.php';
-?> 
-  <? 
+
 $bdd = new PDO('mysql:host=localhost;dbname=projetbdd;charset=utf8;port=3306', 'root', 'root', [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
 $request = "SELECT * FROM salariés";
 $response = $bdd->query($request);
@@ -23,32 +22,30 @@ $salaries = $response->fetchAll(PDO::FETCH_ASSOC); ?>
 
 <? foreach ($salaries as $salarie) : ?>
   <div class=bloc2>
-  <strong><? echo "Nom : " . $salarie['nom']; ?> </strong> 
-  <br/>
-  <strong><? echo "Prénom : " . $salarie['prenom']; ?> </strong> <br/>
-<? echo "Adresse : " . $salarie['adresse']; ?>
-<br/><? echo "Code postale : " . $salarie['CP']; ?>
-<br/><? echo "Ville : " . $salarie['ville']; ?>
-<? $str=strtotime($salarie['date_de_naissance']); 
-$date=date('d-m-Y',$str) ?>
-<br/><? echo "Date de naissance : " . $date; ?>
-<br/><? if ($salarie['sexe']==0) :
-echo "Sexe : Femme";
-else :
-echo "Sexe : Homme";
-endif ?>
-<br/>
-<? echo "Ancienneté : " . $salarie['anciennete'] . " an(s)"; ?>
-<br/><br/>
-<button type="button" class="button">
-<a href="update.php?id=<?=$salarie['ID']?>">Modifier</a>
-</button>
-<button type="button" class="button">
-<a href="delete.php?id=<?=$salarie['ID']?>">Supprimer</a>
-</button>
+    <strong><? echo "Nom : " . $salarie['nom']; ?></strong> <br/>
+    
+    <strong><? echo "Prénom : " . $salarie['prenom']; ?> </strong><br/>
+    
+    <? echo "Adresse : " . $salarie['adresse']; ?><br/>
+    <? echo "Code postale : " . $salarie['CP']; ?><br/>
+    <? echo "Ville : " . $salarie['ville']; ?>
 
-<br/><br/>
-</div> 
+    <? $str=strtotime($salarie['date_de_naissance']); 
+       $date=date('d-m-Y',$str) ?><br/>
+<? echo "Date de naissance : " . $date; ?><br/>
+  <? if ($salarie['sexe']==0) :
+      echo "Sexe : Femme";
+      else :
+      echo "Sexe : Homme";
+    endif ?><br/>
+    <? echo "Ancienneté : " . $salarie['anciennete'] . " an(s)"; ?><br/><br/>
+    <button type="button" class="button">
+    <a href="update.php?id=<?=$salarie['ID']?>">Modifier</a>
+    </button>
+    <button type="button" class="button">
+    <a href="delete.php?id=<?=$salarie['ID']?>">Supprimer</a>
+    </button><br/><br/>
+  </div> 
 <? endforeach; ?>
 </div>
 
