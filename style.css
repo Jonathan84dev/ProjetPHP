@@ -1,0 +1,32 @@
+body {
+font-family: Verdana, Geneva, Tahoma, sans-serif;
+font-size: small;
+}
+
+.button {
+    background-color: #cecaca; /* Green */
+    border: solid black 1px;    
+    text-align: center;
+    font-size: 12px;
+    margin: 2px;
+    padding: 2px;
+    cursor: pointer;
+  }
+
+  .bloc1{
+margin: 12px;
+
+  }
+
+  .bloc2{
+    margin: 5px;
+    padding: 5px;
+    border-color: black;
+    border-style: solid;
+    border-width: thin;
+      }
+
+a:hover 
+{
+       font-weight: bold;
+}
